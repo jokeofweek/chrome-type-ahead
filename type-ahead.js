@@ -281,13 +281,14 @@ function processSearch(search, options) {
   
   var matchedElements = new Array();
   var queryLength = search.text.length;
-  var string = escape_regexp(search.text.split('').join('\0')).replace(/\0/g, '.*?').replace(/\s+/g, "(\\s|\240)+");
+  var string = escape_regexp(search.text.split('').join('\0')).replace('\0','[^' + search.text[0] + ']*?').replace(/\0/g, '.*?').replace(/\s+/g, "(\\s|\240)+");
   if (options.starts_link_only)
     string = '^' + string;
 
   // If string is lower case, search will be case-unsenstive.
   // If string is upper case, search will be case-senstive.
   var regexp = new RegExp(string, string == string.toLowerCase() ? 'ig' : 'g')
+  console.log(regexp);
   // currently Xpath does not support regexp matches. That would be great:
   // document.evaluate('//a//*[matches(text(), "regexp")]', document.body, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(N);
   var rootNodes = [window].concat(getRootNodes());
