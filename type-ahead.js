@@ -56,7 +56,7 @@ function max(a, b) {
   return ((a > b) ? a : b); 
 }
 
-function escape_regexp(s, ignore) {        
+function escape_regexp(s, ignore) {
   var special = ["\\", "?", ".", "+", "(", ")", "{", "}", "[", "]", "$", "^", "*"];
   special.forEach(function(re) {
     if (!ignore || ignore.indexOf(re) < 0) 
@@ -280,7 +280,8 @@ function processSearch(search, options) {
   }
   
   var matchedElements = new Array();
-  var string = escape_regexp(search.text).replace(/\s+/g, "(\\s|\240)+");
+  var queryLength = search.text.length;
+  var string = escape_regexp(search.text.split('').join('\0')).replace(/\0/g, '.*?').replace(/\s+/g, "(\\s|\240)+");
   if (options.starts_link_only)
     string = '^' + string;
   // If string is lower case, search will be case-unsenstive.
@@ -315,6 +316,8 @@ function processSearch(search, options) {
       var regexp2 = new RegExp(regexp);
       var result;
       while (match = regexp2.exec(textNode.data)) {
+      	console.log(match.index + ", " + regexp.lastIndex + "," + queryLength)
+      	if (regexp2.lastIndex - match.index > queryLength * options.fuzzy_maxlength) continue;
         result = {doc: doc, frame: frame, node: textNode, 
                   anchor: anchor, option: option, 
                   start: match.index, end: regexp2.lastIndex};
@@ -602,7 +605,8 @@ var default_options = {
   sites_blacklist: '',
   color_link: '#DDF',
   color_text: '#FF5',
-  color_notfound: 'F55'
+  color_notfound: 'F55',
+  fuzzy_maxlength: 3
 };
 
 function main(options) {
@@ -627,7 +631,8 @@ if (typeof(chrome) == "object" && chrome.extension) {
       timeout: response.timeout,
       color_link: response.color_link || default_options.color_link,
       color_text: response.color_text || default_options.color_text,
-      color_notfound: response.color_notfound  || default_options.color_notfound
+      color_notfound: response.color_notfound  || default_options.color_notfound,
+      fuzzy_maxlength: response.fuzzy_maxlength  || default_options.fuzzy_maxlength
     };
     main(options);
   });
