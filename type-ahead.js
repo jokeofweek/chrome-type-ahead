@@ -316,7 +316,6 @@ function processSearch(search, options) {
       var regexp2 = new RegExp(regexp);
       var result;
       while (match = regexp2.exec(textNode.data)) {
-      	console.log(match.index + ", " + regexp.lastIndex + "," + queryLength)
       	if (regexp2.lastIndex - match.index > queryLength * options.fuzzy_maxlength) continue;
         result = {doc: doc, frame: frame, node: textNode, 
                   anchor: anchor, option: option, 
