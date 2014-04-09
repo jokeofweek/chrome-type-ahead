@@ -32,9 +32,9 @@ function save_options() {
     var field = document.getElementById(name);
     storage_set(name, field.value || '');
   }
-  function save_int(name, default_value) {
+  function save_float(name, default_value) {
     var field = document.getElementById(name);
-    storage_set(name, parseInt(field.value) || default_value);
+    storage_set(name, parseFloat(field.value) || default_value);
   }
 
   save_string("direct_search_mode");
@@ -44,7 +44,7 @@ function save_options() {
   save_string("color_link");
   save_string("color_text");
   save_string("color_notfound");
-  save_int("fuzzy_maxlength", 3);
+  save_float("fuzzy_maxlength", 2);
   feedback();
 }
 
@@ -61,10 +61,10 @@ function restore_options() {
       field.value = val || default_value || "";
     });
   }
-  function restore_int(name, default_value) {
+  function restore_float(name, default_value) {
     var field = document.getElementById(name);
     storage_get(name, function(val) {
-      field.value = parseInt(val) || default_value;
+      field.value = parseFloat(val) || default_value;
     });
   }
   
@@ -75,5 +75,5 @@ function restore_options() {
   restore_string("color_link", '#DDF');
   restore_string("color_text", '#FF5');
   restore_string("color_notfound", 'F55');
-  restore_int("fuzzy_maxlength", 3);
+  restore_float("fuzzy_maxlength", 2);
 }

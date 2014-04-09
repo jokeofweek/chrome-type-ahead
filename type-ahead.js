@@ -284,6 +284,7 @@ function processSearch(search, options) {
   var string = escape_regexp(search.text.split('').join('\0')).replace(/\0/g, '.*?').replace(/\s+/g, "(\\s|\240)+");
   if (options.starts_link_only)
     string = '^' + string;
+
   // If string is lower case, search will be case-unsenstive.
   // If string is upper case, search will be case-senstive.
   var regexp = new RegExp(string, string == string.toLowerCase() ? 'ig' : 'g')
@@ -316,7 +317,7 @@ function processSearch(search, options) {
       var regexp2 = new RegExp(regexp);
       var result;
       while (match = regexp2.exec(textNode.data)) {
-      	if (regexp2.lastIndex - match.index > queryLength * options.fuzzy_maxlength) continue;
+        if (regexp2.lastIndex - match.index > queryLength * options.fuzzy_maxlength) continue;
         result = {doc: doc, frame: frame, node: textNode, 
                   anchor: anchor, option: option, 
                   start: match.index, end: regexp2.lastIndex};
@@ -450,7 +451,8 @@ function init(options) {
     return processSearch(search, { 
       search_links: (search.mode == 'links'),
       starts_link_only: options["starts_link_only"],
-      blur_unless_found: blur_unless_found
+      blur_unless_found: blur_unless_found,
+      fuzzy_maxlength: options["fuzzy_maxlength"]
     });    
   }
 
@@ -605,7 +607,7 @@ var default_options = {
   color_link: '#DDF',
   color_text: '#FF5',
   color_notfound: 'F55',
-  fuzzy_maxlength: 3
+  fuzzy_maxlength: 2
 };
 
 function main(options) {
