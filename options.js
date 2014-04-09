@@ -32,7 +32,11 @@ function save_options() {
     var field = document.getElementById(name);
     storage_set(name, field.value || '');
   }
-  
+  function save_int(name, default_value) {
+    var field = document.getElementById(name);
+    storage_set(name, parseInt(field.value) || default_value);
+  }
+
   save_string("direct_search_mode");
   save_boolean("starts_link_only");
   save_string("sites_blacklist");                 
@@ -40,6 +44,7 @@ function save_options() {
   save_string("color_link");
   save_string("color_text");
   save_string("color_notfound");
+  save_int("fuzzy_maxlength", 3);
   feedback();
 }
 
@@ -56,6 +61,12 @@ function restore_options() {
       field.value = val || default_value || "";
     });
   }
+  function restore_int(name, default_value) {
+    var field = document.getElementById(name);
+    storage_get(name, function(val) {
+      field.value = parseInt(val) || default_value;
+    });
+  }
   
   restore_string("direct_search_mode");
   restore_boolean("starts_link_only");
@@ -64,4 +75,5 @@ function restore_options() {
   restore_string("color_link", '#DDF');
   restore_string("color_text", '#FF5');
   restore_string("color_notfound", 'F55');
+  restore_int("fuzzy_maxlength", 3);
 }
