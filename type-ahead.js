@@ -288,7 +288,6 @@ function processSearch(search, options) {
   // If string is lower case, search will be case-unsenstive.
   // If string is upper case, search will be case-senstive.
   var regexp = new RegExp(string, string == string.toLowerCase() ? 'ig' : 'g')
-  console.log(regexp);
   // currently Xpath does not support regexp matches. That would be great:
   // document.evaluate('//a//*[matches(text(), "regexp")]', document.body, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(N);
   var rootNodes = [window].concat(getRootNodes());
